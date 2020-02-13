@@ -118,7 +118,7 @@ public class Solver {
         array[j] = buf;
     }
 
-    private void rotate(double[][] matrix, double[] f, int j, int i) {
+    public void rotate(double[][] matrix, double[] f, int j, int i) {
         int size = matrix.length;
         double z = Math.max(Math.abs(matrix[i][j]), Math.abs(matrix[j][j]));
         double l = Math.min(Math.abs(matrix[i][j]), Math.abs(matrix[j][j]));
@@ -136,8 +136,8 @@ public class Solver {
         System.arraycopy(matrix[i], 0, copyI, 0, size);
         System.arraycopy(matrix[j], 0, copyJ, 0, size);
         for (int k = 0; k < size; k++) {
-            matrix[j][j] = c * copyJ[j] - s * copyI[j];
-            matrix[i][j] = s * copyJ[j] + c * copyI[j];
+            matrix[j][k] = c * copyJ[k] - s * copyI[k];
+            matrix[i][k] = s * copyJ[k] + c * copyI[k];
         }
 
         double firstElem = c * f[j] - s * f[i];
