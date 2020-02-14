@@ -19,7 +19,7 @@ public class Solver {
             swap(colTransp, j, indMaxCol);
             swap(lengthSquares, j, indMaxCol);
 
-            int maxRow = getIndexMaxRow(matrix, j);
+            int maxRow = getIndexMaxRow(matrix, j + 1);
             swapRows(matrix, j + 1, maxRow);
             swap(f, j + 1, maxRow);
 
@@ -76,7 +76,7 @@ public class Solver {
 
     private int getIndexMaxRow(double[][] matrix, int step) {
         int index = step;
-        for (int i = step + 1; i < matrix.length; i++) {
+        for (int i = step; i < matrix.length - 1; i++) {
             if (matrix[i][step] > matrix[i][step]) {
                 index = i;
             }
@@ -123,6 +123,9 @@ public class Solver {
         double z = Math.max(Math.abs(matrix[i][j]), Math.abs(matrix[j][j]));
         double l = Math.min(Math.abs(matrix[i][j]), Math.abs(matrix[j][j]));
 
+        if (Double.compare(z, 0.0) == 0) {
+            return;
+        }
         double aj = matrix[j][j] / z;
         double ai = matrix[i][j] / z;
         double al = l / z;
