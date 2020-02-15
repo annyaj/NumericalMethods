@@ -1,5 +1,7 @@
 package ru.omsu.imit.numericalMethods.task1.mgen;
 
+import java.util.Arrays;
+
 public class Gen {
 
     public void print_matr(double[][] a, int n) {
@@ -58,6 +60,43 @@ public class Gen {
         for (i = 0; i < n; i++) Q[i][n - 1] = q;
     }
 
+    public static double get_z_infinity(double[] answers, double[] expectedAnswers) {
+        double[] z = new double[answers.length];
+
+        for (int i = 0; i < answers.length; i++) {
+            z[i] = answers[i] - expectedAnswers[i];
+        }
+        return Arrays.stream(z).map(Math::abs).max().orElse(0.0);
+    }
+
+    public static double get_r_infinity(double[][] matrix, double[] f, double[] answers) {
+        int n = answers.length;
+        double[] r = new double[n];
+        double t;
+        for (int i = 0; i < n; i++) {
+            t = 0;
+            for (int j = 0; j < n; j++) {
+                t += matrix[i][j] * answers[j];
+            }
+            r[i] = t - f[i];
+        }
+
+        return Arrays.stream(r).map(Math::abs).max().orElse(0.0);
+    }
+
+    public void analyse(double[][] matrix, double[] f, double[] expectedAnswers, double[] answers) {
+        double z_infinity = get_z_infinity(answers, expectedAnswers);
+        double x_infinity = Arrays.stream(expectedAnswers).map(Math::abs).max().orElse(0.0);
+        double f_infinity = Arrays.stream(f).map(Math::abs).max().orElse(0.0);
+        double dzeta = z_infinity / x_infinity;
+        double r_infinity = get_r_infinity(matrix, f, answers);
+        double ro = r_infinity / f_infinity;
+
+        System.out.println("||z|| = " + z_infinity);
+        System.out.println("dzeta = " + dzeta);
+        System.out.println("||r|| = " + r_infinity);
+        System.out.println("ro = " + ro);
+    }
 
     public void mygen(double[][] a, double[][] a_inv, int n, double alpha, double beta, int sign_law, int lambda_law, int variant, int schema) {
         int i, j, k;
