@@ -22,12 +22,12 @@ public class RichardsonMethod {
     public static double[] getTau(double alpha, double beta, int k) {
         double[] tau = new double[k];
         for (int j = 0; j < k; j++) {
-            tau[j] = 2 / (alpha + beta + (beta - alpha) * Math.cos(Math.PI * (2 * j + 1) / 2 * k));
+            tau[j] = 2.0 / (alpha + beta + (beta - alpha) * Math.cos(Math.PI * (2 * j + 1) / 2.0 / k));
         }
         return tau;
     }
 
-    public double getInfNorm(double[] x1, double[] x2) {
+    public static double getInfNorm(double[] x1, double[] x2) {
         double max = 0;
         for (int i = 0; i < x1.length; i++) {
             if (Math.abs(x1[i] - x2[i]) > max) {
@@ -37,7 +37,7 @@ public class RichardsonMethod {
         return max;
     }
 
-    public void multiplyByMatrix(double[][] a, double[] x) {
+    public static void multiplyByMatrix(double[][] a, double[] x) {
         int size = x.length;
         double[] b = new double[size];
         System.arraycopy(x, 0, b, 0, size);
@@ -49,36 +49,41 @@ public class RichardsonMethod {
         }
     }
 
-    public void multiplyByNumber(double[] x, double number) {
+    public static void multiplyByNumber(double[] x, double number) {
         for (int i = 0; i < x.length; i++) {
             x[i] *= number;
         }
     }
 
-    public void subtract(double[] x1, double[] x2) {
+    public static void subtract(double[] x1, double[] x2) {
         for (int i = 0; i < x1.length; i++) {
             x2[i] = x1[i] - x2[i];
         }
     }
 
-    public void sum(double[] x1, double[] x2) {
+    public static void sum(double[] x1, double[] x2) {
         for (int i = 0; i < x1.length; i++) {
             x2[i] += x1[i];
         }
     }
 
-    public double[] solve(double alpha, double beta, int k, double[][] a, double[] newX, double[] f, double epsilon) {
+    public static double[] solve(double alpha, double beta, int k, double[][] a, double[] newX,
+                                 double[] f, double epsilon) {
         double[] tau = RichardsonMethod.getTau(alpha, beta, k);
+        int[] order = orderingParameters(k);
+        if (order == null) {
+            return null;
+        }
         double[] oldX = new double[newX.length];
         double[] previousX = new double[newX.length];
 
         do {
             System.arraycopy(newX, 0, previousX, 0, newX.length);
-            for (double v : tau) {
+            for (int i = 0; i < k; i++) {
                 System.arraycopy(newX, 0, oldX, 0, newX.length);
                 multiplyByMatrix(a, newX); // A * x(k - 1)
                 subtract(f, newX); // f - A * x(k - 1)
-                multiplyByNumber(newX, v); // tau * (f - A * x(k - 1))
+                multiplyByNumber(newX, tau[order[i] - 1]); // tau * (f - A * x(k - 1))
                 sum(oldX, newX); // tau * (f - A * x(k - 1)) + x(k-1)
             }
         } while (getInfNorm(previousX, newX) >= epsilon);
