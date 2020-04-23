@@ -77,7 +77,7 @@ public class Solver {
     private int getIndexMaxRow(double[][] matrix, int step) {
         int index = step;
         for (int i = step; i < matrix.length - 1; i++) {
-            if (matrix[i][step] > matrix[i][step]) {
+            if (matrix[i][step - 1] > matrix[index][step - 1]) {
                 index = i;
             }
         }
@@ -138,6 +138,7 @@ public class Solver {
         double[] copyJ = new double[size];
         System.arraycopy(matrix[i], 0, copyI, 0, size);
         System.arraycopy(matrix[j], 0, copyJ, 0, size);
+
         for (int k = 0; k < size; k++) {
             matrix[j][k] = c * copyJ[k] - s * copyI[k];
             matrix[i][k] = s * copyJ[k] + c * copyI[k];

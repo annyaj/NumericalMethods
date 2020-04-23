@@ -3,18 +3,21 @@ package ru.omsu.imit.numericalMethods.task1.mgen;
 import org.junit.jupiter.api.Test;
 import ru.omsu.imit.numericalMethods.task1.Solver;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 
 class GenTest {
 
     @Test
     public void GenTest() throws FileNotFoundException {
+        int p = 0;
         int n = 100;
         double alpha = 1.e-1;
         double beta = 1.;
+
+        double t;
+        double x_inf;
+        double z_inf;
 
         double[][] a = new double[n][];
         double[][] a_copy = new double[n][];
@@ -24,14 +27,8 @@ class GenTest {
         double[] f_copy = new double[n];
 
         double[] expectedAnswers = new double[n];
-        Gen g = new Gen();
         Solver solver = new Solver();
 
-        double t;
-        double x_inf;
-        double z_inf;
-
-        int p = 0;
         do {
             p++;
             System.out.println("Iteration" + p);
@@ -42,8 +39,9 @@ class GenTest {
                 expectedAnswers[i] = Math.random() * 10.;
             }
 
-            g.mygen(a, a_inv, n, alpha, beta, 1, 2, 0, 1); // симметричная
-            // g.mygen(a, a_inv, n, alpha, beta, 1, 2, 1, 1); //проостой структуры
+            Gen g = new Gen();
+            // g.mygen(a, a_inv, n, alpha, beta, 1, 2, 0, 1); // симметричная
+            g.mygen(a, a_inv, n, alpha, beta, 1, 2, 1, 1); //проостой структуры
             //  g.mygen(a, a_inv, n, alpha, beta, 0, 0, 2, 1); //жорданова клетка
 
             // g.print_matr(a, n);
