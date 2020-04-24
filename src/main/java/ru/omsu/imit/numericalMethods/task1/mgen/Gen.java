@@ -100,7 +100,7 @@ public class Gen {
         return Arrays.stream(r).map(Math::abs).max().orElse(0.0);
     }
 
-    public double analyse(double[][] matrix, double[] f, double[] expectedAnswers, double[] answers) {
+    public double analyse(double[][] matrix, double[] f, double[] expectedAnswers, double[] answers, String file) {
         double z_infinity = get_z_infinity(answers, expectedAnswers);
         double x_infinity = Arrays.stream(expectedAnswers).map(Math::abs).max().orElse(0.0);
         double f_infinity = Arrays.stream(f).map(Math::abs).max().orElse(0.0);
@@ -108,20 +108,20 @@ public class Gen {
         double r_infinity = get_r_infinity(matrix, f, answers);
         double ro = r_infinity / f_infinity;
 
-        // try (PrintWriter pw = new PrintWriter(new FileWriter(new File("zhord.csv"), true))) {
-        //     pw.printf("%e;%e;%e;%e;%n", z_infinity, dzeta, r_infinity, ro);
-        System.out.println("||z|| = " + z_infinity);
-        System.out.println("dzeta = " + dzeta);
-        System.out.println("||r|| = " + r_infinity);
-        System.out.println("ro = " + ro);
-        //   } catch (IOException e) {
-        //      e.printStackTrace();
-        //  }
+        try (PrintWriter pw = new PrintWriter(new FileWriter(new File(file), true))) {
+            pw.printf("%e;%e;%e;%e;%n", z_infinity, dzeta, r_infinity, ro);
+            System.out.println("||z|| = " + z_infinity);
+            System.out.println("dzeta = " + dzeta);
+            System.out.println("||r|| = " + r_infinity);
+            System.out.println("ro = " + ro);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return z_infinity;
     }
 
     public void mygen(double[][] a, double[][] a_inv, int n, double alpha, double beta, int sign_law, int lambda_law,
-                      int variant, int schema) {
+                      int variant, int schema, String file) {
         int i, j, k;
 
         System.out.println("   M A T R I X  G E N.  ");
@@ -485,11 +485,11 @@ public class Gen {
 
         norm = matr_inf_norm(r);
         System.out.println(" ||R_gen|| = " + norm);
-      /*  try (PrintWriter pw = new PrintWriter(new FileWriter(new File("zhord.csv"), true))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(new File(file), true))) {
             pw.printf("%e;%e;%e;%e;%e;", alpha, beta, norm, norm_inv, obusl);
         } catch (IOException e) {
             e.printStackTrace();
         }
-*/
+
     }
 }

@@ -28,13 +28,11 @@ public class RichardsonMethod {
     }
 
     public static double getInfNorm(double[] x1, double[] x2) {
-        double max = 0;
+        double res = 0;
         for (int i = 0; i < x1.length; i++) {
-            if (Math.abs(x1[i] - x2[i]) > max) {
-                max = Math.abs(x1[i] - x2[i]);
-            }
+            res += (x1[i] - x2[i]) * (x1[i] - x2[i]);
         }
-        return max;
+        return Math.sqrt(res);
     }
 
     public static void multiplyByMatrix(double[][] a, double[] x) {
@@ -43,6 +41,7 @@ public class RichardsonMethod {
         System.arraycopy(x, 0, b, 0, size);
 
         for (int i = 0; i < size; i++) {
+            x[i] = 0;
             for (int j = 0; j < size; j++) {
                 x[i] += a[i][j] * b[j];
             }
@@ -68,7 +67,7 @@ public class RichardsonMethod {
     }
 
     public static double[] solve(double alpha, double beta, int k, double[][] a, double[] newX,
-                                 double[] f, double epsilon) {
+                                 double[] f, double epsilon, int maxIteration) {
         double[] tau = RichardsonMethod.getTau(alpha, beta, k);
         int[] order = orderingParameters(k);
         if (order == null) {
@@ -77,6 +76,7 @@ public class RichardsonMethod {
         double[] oldX = new double[newX.length];
         double[] previousX = new double[newX.length];
 
+        int j = 0;
         do {
             System.arraycopy(newX, 0, previousX, 0, newX.length);
             for (int i = 0; i < k; i++) {
@@ -86,7 +86,8 @@ public class RichardsonMethod {
                 multiplyByNumber(newX, tau[order[i] - 1]); // tau * (f - A * x(k - 1))
                 sum(oldX, newX); // tau * (f - A * x(k - 1)) + x(k-1)
             }
-        } while (getInfNorm(previousX, newX) >= epsilon);
+            j++;
+        } while (j < maxIteration && getInfNorm(previousX, newX) >= epsilon);
         return newX;
     }
 }

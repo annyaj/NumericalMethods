@@ -2,7 +2,7 @@ package ru.omsu.imit.numericalMethods.task1;
 
 public class Solver {
 
-    public double[] getSolve(double[][] matrix, double[] f) {
+    public static double[] getSolve(double[][] matrix, double[] f) {
         int size = f.length;
 
         int[] colTransp = new int[size];
@@ -56,7 +56,7 @@ public class Solver {
         return x;
     }
 
-    private double getVectorLengthSquares(double[][] matrix, int ind) {
+    private static double getVectorLengthSquares(double[][] matrix, int ind) {
         double lenSq = 0.0;
         for (double[] doubles : matrix) {
             lenSq += doubles[ind] * doubles[ind];
@@ -64,7 +64,7 @@ public class Solver {
         return lenSq;
     }
 
-    private int getIndexMaxVector(double[] lengthSquares, int step) {
+    private static int getIndexMaxVector(double[] lengthSquares, int step) {
         int index = step;
         for (int i = step + 1; i < lengthSquares.length; i++) {
             if (lengthSquares[i] > lengthSquares[index]) {
@@ -74,7 +74,7 @@ public class Solver {
         return index;
     }
 
-    private int getIndexMaxRow(double[][] matrix, int step) {
+    private static int getIndexMaxRow(double[][] matrix, int step) {
         int index = step;
         for (int i = step; i < matrix.length - 1; i++) {
             if (matrix[i][step - 1] > matrix[index][step - 1]) {
@@ -84,7 +84,7 @@ public class Solver {
         return index;
     }
 
-    private void swapColumns(double[][] matrix, int i, int j) {
+    private static void swapColumns(double[][] matrix, int i, int j) {
         if (i != j) {
             double buf;
             for (int k = 0; k < matrix.length; k++) {
@@ -95,7 +95,7 @@ public class Solver {
         }
     }
 
-    private void swapRows(double[][] matrix, int i, int j) {
+    private static void swapRows(double[][] matrix, int i, int j) {
         if (i != j) {
             double buf;
             for (int k = 0; k < matrix.length; k++) {
@@ -106,19 +106,19 @@ public class Solver {
         }
     }
 
-    private void swap(double[] array, int i, int j) {
+    private static void swap(double[] array, int i, int j) {
         double buf = array[i];
         array[i] = array[j];
         array[j] = buf;
     }
 
-    private void swap(int[] array, int i, int j) {
+    private static void swap(int[] array, int i, int j) {
         int buf = array[i];
         array[i] = array[j];
         array[j] = buf;
     }
 
-    public void rotate(double[][] matrix, double[] f, int j, int i) {
+    public static void rotate(double[][] matrix, double[] f, int j, int i) {
         int size = matrix.length;
         double z = Math.max(Math.abs(matrix[i][j]), Math.abs(matrix[j][j]));
         double l = Math.min(Math.abs(matrix[i][j]), Math.abs(matrix[j][j]));
